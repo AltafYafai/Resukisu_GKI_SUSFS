@@ -162,7 +162,7 @@ jobs:
       - build-a12-5-10
     steps:
       - name: 下载冲突文件
-          # 仅保留 Android 12 5.10 的 build 检查即可，这里省略了其他的 build-* 检查
+        # 仅保留 Android 12 5.10 的 build 检查即可，这里省略了其他的 build-* 检查
         uses: actions/download-artifact@v8
         with:
           path: ./downloaded-artifacts

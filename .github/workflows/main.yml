@@ -520,7 +520,40 @@ jobs:
             -d chat_id="${CHAT_ID}" \
             -d parse_mode="HTML" \
             --data-urlencode text="${TEXT}"
-            
+
+      - name: 上传产物和管理器到 Telegram 频道
+        continue-on-error: true
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: |
+          set -euo pipefail
+
+          echo "开始上传 APK 与 内核产物到 Telegram..."
+
+          # Upload Manager APKs
+          find ./downloaded-artifacts -type f -name "*.apk" -print0 | \
+          while IFS= read -r -d '' f; do
+            filename=$(basename "$f")
+            echo "Uploading Manager to Telegram: $filename"
+            curl -s -F chat_id="${CHAT_ID}" \
+              -F document=@"$f" \
+              -F caption="KernelSU-Next Manager APK (version: ${{ env.KSU_VER }})" \
+              "https://api.telegram.org/bot${BOT_TOKEN}/sendDocument" || true
+          done
+
+          # Upload Kernel build files (excluding rejects)
+          for file in ./downloaded-artifacts/*_kernel-*/*; do
+            [ -d "$file" ] && continue
+            [[ "$file" == *-Rejects/* ]] && continue
+            filename=$(basename "$file")
+            echo "Uploading Kernel to Telegram: $filename"
+            curl -s -F chat_id="${CHAT_ID}" \
+              -F document=@"$file" \
+              -F caption="GKI Kernel Build: $filename (tag: $NEW_TAG)" \
+              "https://api.telegram.org/bot${BOT_TOKEN}/sendDocument" || true
+          done
+
       - name: 发送 Telegram 群组通知(ReSukiSU群组)
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}

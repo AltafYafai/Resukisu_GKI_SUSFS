@@ -193,7 +193,7 @@ jobs:
   # Create a GitHub Release when release_type is not Actions
   # Only the original repository can be run. Fork repositories skip this step.
   release:
-    if: ${{ always() && !cancelled() && inputs.release_type != 'Actions' && (github.repository == 'ReSukiSU-GKI/GKI_KernelSU_SUSFS' || github.repository == 'altafyafai/Resukisu_GKI_SUSFS' || github.repository == 'altafyafai/GKI_KernelSU_SUSFS') }}
+    if: ${{ always() && !cancelled() && inputs.release_type != 'Actions' && (github.repository_owner == 'altafyafai' || github.repository == 'ReSukiSU-GKI/GKI_KernelSU_SUSFS') }}
     runs-on: ubuntu-latest
     permissions:
       contents: write

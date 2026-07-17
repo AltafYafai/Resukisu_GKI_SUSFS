@@ -88,7 +88,7 @@ on:
 
 jobs:
   build-kernel:
-    name: "${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.android_version }}-${{ inputs.os_patch_level }}-ReSukiSU"
+    name: "${{ inputs.kernel_version }}.${{ inputs.sub_level }}-${{ inputs.android_version }}-${{ inputs.os_patch_level }}-${{ inputs.ksu_variant }}"
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
@@ -111,7 +111,7 @@ jobs:
           echo "Kernel version: ${{ inputs.kernel_version }}"
           echo "Subversion number: ${{ inputs.sub_level }}"
           echo "Patch Level: ${{ inputs.os_patch_level }}"
-          echo "KSU Variant: ReSukiSU"
+          echo "KSU Variant: ${{ inputs.ksu_variant }}"
           echo "KSU branch: ${{ inputs.ksu_branch }}"
           echo "Build time: ${{ inputs.build_time }}"
           echo "SUSFS status: ${{ inputs.enable_susfs }}"
@@ -1496,7 +1496,7 @@ jobs:
       - name: Upload build product
         uses: actions/upload-artifact@v6
         with:
-          name: ReSukiSU_kernel-${{ env.CONFIG }}
+          name: ${{ inputs.ksu_variant }}_kernel-${{ env.CONFIG }}
           path: |
             *AnyKernel3.zip
 #            *.img
@@ -1507,7 +1507,7 @@ jobs:
         if: always() && env.REJ_COUNT > 0
         uses: actions/upload-artifact@v6
         with:
-          name: ReSukiSU_kernel-${{ env.CONFIG }}-Rejects
+          name: ${{ inputs.ksu_variant }}_kernel-${{ env.CONFIG }}-Rejects
           path: patch-rejects/
           if-no-files-found: ignore
           compression-level: 9

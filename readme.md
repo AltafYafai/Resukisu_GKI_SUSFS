@@ -1,11 +1,11 @@
-# GKI KernelSU SUSFS
-### Automated Kernel Build Repository for ReSukiSU
+# GKI KernelSU-Next SUSFS
+### Automated Kernel Build Repository for KernelSU-Next
 
-**Automated GKI Kernel Builds | Integrated ReSukiSU + SUSFS**
+**Automated GKI Kernel Builds | Integrated KernelSU-Next + SUSFS**
 
-[![Release](https://img.shields.io/github/v/release/coolzyd9107/GKI_KernelSU_SUSFS?label=Release&style=flat-square&logo=github&logoColor=white&color=2ea44f)](https://github.com/ReSukiSU-GKI/GKI_KernelSU_SUSFS/releases)
+[![Release](https://img.shields.io/github/v/release/altafyafai/GKI_KernelSU-Next_SUSFS?label=Release&style=flat-square&logo=github&logoColor=white&color=2ea44f)](https://github.com/altafyafai/GKI_KernelSU-Next_SUSFS/releases)
 [![Telegram](https://img.shields.io/static/v1?label=Telegram&message=Channel&color=0088cc)](https://t.me/ReSukiSUKernelBuilds)
-[![ReSukiSU](https://img.shields.io/badge/ReSukiSU-Supported-5AA300?style=flat-square)](https://kernelsu.org/)
+[![KernelSU-Next](https://img.shields.io/badge/KernelSU--Next-Supported-5AA300?style=flat-square)](https://github.com/KernelSU-Next/KernelSU-Next)
 [![SUSFS](https://img.shields.io/badge/SUSFS-Integrated-E67E22?style=flat-square)](https://gitlab.com/simonpunk/susfs4ksu)
 
 ---
@@ -14,7 +14,7 @@
 
 1. This repository is a fork of [zzh20188/GKI_KernelSU_SUSFS](https://github.com/zzh20188/GKI_KernelSU_SUSFS/). Only minor updates and bug fixes have been applied here. For general builds, please consider using the upstream repository.
 
-2. This repository only supports building kernels with **ReSukiSU**. Support for other KernelSU variants has been completely removed. If you need to build with other variants, please fork the upstream repository and build it yourself.
+2. This repository has been migrated to support building kernels with **KernelSU-Next**.
 
 ---
 
@@ -22,7 +22,7 @@
 
 > **Note:** OnePlus ColorOS 14 and 15 are currently not supported; flashing might require a factory reset to boot.
 
-> **ReSukiSU:** ReSukiSU is updated more frequently than SukiSU. If SukiSU throws errors, try ReSukiSU. The default variant has been set to **ReSukiSU**.
+> **KernelSU-Next:** The default variant has been set to **KernelSU-Next**, leveraging the standard `next` branch (or `next-susfs` branch from `pershoot` when SUSFS is active).
 
 > **rekernel (Beta):** Supported rekernel features.
 

@@ -431,11 +431,7 @@ jobs:
             echo "Use custom branch/commit: $branch_input"
           else
             if [ "${{ inputs.ksu_variant }}" == "Next" ]; then
-              if [ "${{ inputs.enable_susfs }}" == "true" ]; then
-                BRANCH="-s next-susfs"
-              else
-                BRANCH="-s next"
-              fi
+              BRANCH="-s next"
             else
               BRANCH="-s main"
             fi
@@ -454,12 +450,8 @@ jobs:
               curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash $BRANCH
               ;;
             "Next")
-              echo "添加 KernelSU-Next..."
-              if [[ "$BRANCH" == *next-susfs* ]]; then
-                curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/refs/heads/next-susfs/kernel/setup.sh" | bash $BRANCH
-              else
-                curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash $BRANCH
-              fi
+              echo "添加 KernelSU-Next (upstream)..."
+              curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash $BRANCH
               ;;
             *)
               echo "Add ReSukiSU..."
@@ -498,7 +490,7 @@ jobs:
           cp $SUSFS4KSU/kernel_patches/include/linux/* ./common/include/linux/
 
           case "${{ inputs.ksu_variant }}" in
-            "Official")
+            "Official"|"Next")
               cd ./KernelSU
               cp $SUSFS4KSU/kernel_patches/KernelSU/10_enable_susfs_for_ksu.patch ./
               # Compatible with older patches: only replace with kernel/Kbuild if the patch still only modifies kernel/Makefile
@@ -510,8 +502,8 @@ jobs:
 
               cd ..
               ;;
-            "Next"|"SukiSU"|"ReSukiSU")
-              echo "Next/SukiSU/ReSukiSU uses built-in SUSFS support"
+            "SukiSU"|"ReSukiSU")
+              echo "SukiSU/ReSukiSU uses built-in SUSFS support"
               ;;
           esac
 

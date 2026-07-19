@@ -786,7 +786,8 @@ static void try_umount(const char *mnt, bool check_mnt, int flags)
 	}
 
 #if defined(CONFIG_KSU_SUSFS_TRY_UMOUNT) && defined(CONFIG_KSU_SUSFS_ENABLE_LOG)
-	if (susfs_is_log_enabled) {
+	extern struct static_key_true susfs_is_log_enabled;
+	if (static_branch_likely(&susfs_is_log_enabled)) {
 		pr_info("susfs: umounting '%s' for uid: %d\n", mnt, uid);
 	}
 #endif
@@ -857,18 +858,10 @@ LSM_HANDLER_TYPE ksu_handle_setuid(struct cred *new, const struct cred *old)
 	return 0;
 
 do_umount:
-	try_umount("/odm", true, 0);
-	try_umount("/system", true, 0);
-	try_umount("/vendor", true, 0);
-	try_umount("/product", true, 0);
-	try_umount("/system_ext", true, 0);
-	try_umount("/data/adb/modules", false, MNT_DETACH);
-	try_umount("/debug_ramdisk", false, MNT_DETACH);
+	susfs_try_umount_all(new_uid.val);
 
 	get_task_struct(current);
-
 	susfs_set_current_proc_umounted();
-
 	put_task_struct(current);
 	return 0;
 }
@@ -900,10 +893,6 @@ int ksu_handle_setuid(struct cred *new, const struct cred *old)
 
 	if (!ksu_uid_should_umount(new_uid.val)) {
 		return 0;
-	} else {
-#ifdef CONFIG_KSU_DEBUG
-		pr_info("uid: %d should not umount!\n", current_uid().val);
-#endif
 	}
 
 	bool is_zygote_child = is_zygote(old->security);

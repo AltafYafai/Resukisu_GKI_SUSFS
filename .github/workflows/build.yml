@@ -427,14 +427,11 @@ jobs:
 
           # If the user enters a custom branch name or commit hash, use it directly
           if [ -n "$branch_input" ]; then
-            BRANCH="-s $branch_input"
+            BRANCH="$branch_input"
             echo "Use custom branch/commit: $branch_input"
           else
-            if [ "${{ inputs.ksu_variant }}" == "Next" ]; then
-              BRANCH="-s next"
-            else
-              BRANCH="-s main"
-            fi
+            BRANCH=""
+            echo "No custom branch specified, will use default (latest tag)"
           fi
 
           echo "BRANCH=$BRANCH" >> $GITHUB_ENV
@@ -452,6 +449,11 @@ jobs:
             "Next")
               echo "添加 KernelSU-Next (upstream)..."
               curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash $BRANCH
+              # Upstream clones to KernelSU-Next/ but workflow expects KernelSU/
+              if [ -d "KernelSU-Next" ] && [ ! -L "KernelSU" ] && [ ! -d "KernelSU" ]; then
+                ln -sf KernelSU-Next KernelSU
+                echo "[+] Created KernelSU symlink -> KernelSU-Next"
+              fi
               ;;
             *)
               echo "Add ReSukiSU..."
